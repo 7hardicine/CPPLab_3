@@ -1,7 +1,9 @@
 ﻿#include <iostream>
 #include <locale>
 #include <math.h>
+#include <iomanip>
 
+using namespace std;
 using namespace std;
 
 int recursive_calls = 0;
@@ -10,12 +12,10 @@ double math_arth(double x)
 {
     return atanh(x);
 }
-
 double term(double x, int n) 
 {
     return pow(x, 2 * n + 1) / (2 * n + 1);
 }
-
 double iterative_sum(double x, double epsilon) 
 {
     double sum = 0;
@@ -29,7 +29,6 @@ double iterative_sum(double x, double epsilon)
     } while (fabs(math_arth(x) - sum) >= epsilon);
     return sum;
 }
-
 double recursive_sum(double x, double epsilon, int n, double current_sum) 
 {
     recursive_calls++;
@@ -55,22 +54,22 @@ int main() {
     cout << "Введите точность epsilon: ";
     cin >> epsilon;
 
-    double (*math_func)(double) = &math_arth;
-    double (*iter_func)(double, double) = &iterative_sum;
-    double (*rec_func)(double, double, int, double) = &recursive_sum;
-    cout.width(10);
-    cout << right << "x" << endl;
-    cout << "----------------------------------------------------------------------------------------" << endl;
+    cout << setw(10) << "x" << setw(16) << "Arth(x)" << setw(21) << "Итеративная сумма" \
+        << setw(21) << "Рекурсивная сумма" << setw(10) << "Вызовы" << endl;
+    cout << "--------------------------------------------------------------------------------" << endl;
 
+    cout.setf(ios::fixed);
     for (double x = start_x; x <= end_x; x += step) 
     {
         recursive_calls = 0; 
-        double math_val = math_func(x);
-        double iter_val = iter_func(x, epsilon);
-        double rec_val = rec_func(x, epsilon, 0, 0.0);
-        printf("%10.4f %15.8f %20.8f %20.8f %15d\n",
-            x, math_val, iter_val, rec_val, recursive_calls);
+        double math_val = math_arth(x);
+        double iter_val = iterative_sum(x, epsilon);
+        double rec_val = recursive_sum(x, epsilon, 0, 0);
+        cout << setprecision(4) << setw(10) << x << setw(16) << setprecision(8) << math_val \
+            << setprecision(8) << setw(21) << iter_val << setprecision(8) << setw(21) << rec_val \
+            << setw(10) << recursive_calls << endl;
     }
+    cout.unsetf(ios::fixed);
 
     system("pause");
     return 1;
