@@ -45,7 +45,7 @@ int main() {
     setlocale(LC_ALL, "rus");
     double start_x, end_x, step, epsilon;
 
-    cout << "Введите начальное значение x (-1 < x < 1):";
+    cout << "Введите начальное значение x (-1 < x < 1): ";
     cin >> start_x;
     cout << "Введите конечное значение x (-1 < x < 1): ";
     cin >> end_x;
@@ -54,17 +54,20 @@ int main() {
     cout << "Введите точность epsilon: ";
     cin >> epsilon;
 
+    double (*math_func)(double) = &math_arth;
+    double (*iter_func)(double, double) = &iterative_sum;
+    double (*rec_func)(double, double, int, double) = &recursive_sum;
     cout << setw(10) << "x" << setw(16) << "Arth(x)" << setw(21) << "Итеративная сумма" \
         << setw(21) << "Рекурсивная сумма" << setw(10) << "Вызовы" << endl;
     cout << "--------------------------------------------------------------------------------" << endl;
 
     cout.setf(ios::fixed);
-    for (double x = start_x; x <= end_x; x += step) 
+    for (double x = start_x; x < end_x + step; x += step) 
     {
         recursive_calls = 0; 
-        double math_val = math_arth(x);
-        double iter_val = iterative_sum(x, epsilon);
-        double rec_val = recursive_sum(x, epsilon, 0, 0);
+        double math_val = math_func(x);
+        double iter_val = iter_func(x, epsilon);
+        double rec_val = rec_func(x, epsilon, 0, 0);
         cout << setprecision(4) << setw(10) << x << setw(16) << setprecision(8) << math_val \
             << setprecision(8) << setw(21) << iter_val << setprecision(8) << setw(21) << rec_val \
             << setw(10) << recursive_calls << endl;
